@@ -4,25 +4,36 @@ import useAuth from "../Hooks/useAuth";
 import useProduct from "../Hooks/useProduct";
 
 const Product = () => {
-    const { user, logOut } = useAuth();
+    const { user, logOut } = useAuth()
     const [products] = useProduct();
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8
+    const [searchQuery, setSearchQuery] = useState("");
+    const itemsPerPage = 8;
 
     const handleSignOut = () => {
         logOut();
     };
 
+    // Search logic
+    const filteredProducts = products.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+    const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
     const handlePageChange = (newPage) => {
         if (newPage > 0 && newPage <= totalPages) {
             setCurrentPage(newPage);
         }
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        setCurrentPage(1); 
     };
 
     return (
@@ -42,6 +53,18 @@ const Product = () => {
                     </button>
                 </div>
             )}
+
+            <div>
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="Search by product name"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="border px-3 py-2 border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+            </div>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {currentItems.map((item) => (
