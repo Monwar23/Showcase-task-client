@@ -7,8 +7,10 @@ import FirebaseProvider from './firebase/FirebaseProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <FirebaseProvider>
+     <div className='max-w-7xl mx-auto'>
+     <FirebaseProvider>
       <RouterProvider router={router} />
       </FirebaseProvider>
+     </div>
   </StrictMode>,
 )
