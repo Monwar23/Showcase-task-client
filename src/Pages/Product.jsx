@@ -1,30 +1,32 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-// import useAuth from "../Hooks/useAuth";
 import useProduct from "../Hooks/useProduct";
 
 const Product = () => {
-    // const { user, logOut } = useAuth();
     const [products] = useProduct();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedBrand, setSelectedBrand] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-    const [priceRange, setPriceRange] = useState([0, 5000]); 
+    const [priceRange, setPriceRange] = useState([0, 5000]);
+    const [sortOption, setSortOption] = useState(""); 
     const itemsPerPage = 8;
 
-    // const handleSignOut = () => {
-    //     logOut();
-    // };
-
-    // Filtering and Sorting Logic
-    const filteredProducts = products
+    // Filtering, Sorting and Pagination Logic
+    let filteredProducts = products
         .filter((item) =>
             item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (selectedBrand ? item.brand === selectedBrand : true) &&
             (selectedCategory ? item.category === selectedCategory : true) &&
             item.price >= priceRange[0] && item.price <= priceRange[1]
         );
+
+    // Sorting logic
+    if (sortOption === "priceLowToHigh") {
+        filteredProducts.sort((a, b) => a.price - b.price);
+    } else if (sortOption === "priceHighToLow") {
+        filteredProducts.sort((a, b) => b.price - a.price);
+    } else if (sortOption === "dateNewestFirst") {
+        filteredProducts.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date));
+    }
 
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -40,23 +42,23 @@ const Product = () => {
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
-        setCurrentPage(1); 
-    };
-
-    const handleBrandChange = (e) => {
-        setSelectedBrand(e.target.value);
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
 
     const handleCategoryChange = (e) => {
         setSelectedCategory(e.target.value);
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
 
     const handlePriceRangeChange = (e) => {
         const value = e.target.value.split('-').map(Number);
         setPriceRange(value);
-        setCurrentPage(1); 
+        setCurrentPage(1);
+    };
+
+    const handleSortChange = (e) => {
+        setSortOption(e.target.value);
+        setCurrentPage(1);
     };
 
     return (
@@ -65,64 +67,55 @@ const Product = () => {
                 <title>ShowcasePro || Product</title>
             </Helmet>
 
-            {/* {user && (
-                <div className="flex items-center justify-end gap-2 mb-4">
-                    <h2>{user?.email}</h2>
-                    <button
-                        className="bg-white border border-pink-500 text-pink-500 font-bold py-2 px-6 rounded-full hover:bg-pink-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
-                        onClick={handleSignOut}
-                    >
-                        Log Out
-                    </button>
+            <div className="flex gap-4 justify-center">
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search by product name"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className="border border-pink-500 px-3 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    />
                 </div>
-            )} */}
 
-            <div className="mb-4">
-                <input
-                    type="text"
-                    placeholder="Search by product name"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className="border px-3 py-2 rounded-lg w-full"
-                />
-            </div>
+                <div className="mb-8 flex gap-4">
+                    <select
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        className="border border-pink-500 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                        <option value="">Select Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Home Appliances">Home Appliances</option>
+                        <option value="Fitness">Fitness</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Personal Care">Personal Care</option>
+                    </select>
 
-            <div className="mb-4 flex gap-4">
-                <select
-                    value={selectedBrand}
-                    onChange={handleBrandChange}
-                    className="border px-3 py-2 rounded-lg"
-                >
-                    <option value="">Select Brand</option>
-                    <option value="BrandA">Brand A</option>
-                    <option value="BrandB">Brand B</option>
-                </select>
+                    <select
+                        onChange={handlePriceRangeChange}
+                        className="border border-pink-500 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                        <option value="0-5000">Select Price Range</option>
+                        <option value="0-100">Under $100</option>
+                        <option value="101-500">$101 - $500</option>
+                        <option value="501-1500">$501 - $1500</option>
+                        <option value="1501-3000">$1501 - $3000</option>
+                        <option value="3001-5000">$3001 - $5000</option>
+                    </select>
 
-                <select
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    className="border px-3 py-2 rounded-lg"
-                >
-                    <option value="">Select Category</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Home Appliances">Home Appliances</option>
-                    <option value="Fitness">Fitness</option>
-                    <option value="Furniture">Furniture</option>
-                    <option value="Personal Care">Personal Care</option>
-                </select>
-
-                <select
-                    onChange={handlePriceRangeChange}
-                    className="border px-3 py-2 rounded-lg"
-                >
-                    <option value="0-5000">Select Price Range</option>
-                    <option value="0-100">Under $100</option>
-                    <option value="101-500">$101 - $500</option>
-                    <option value="501-1500">$501 - $1500</option>
-                    <option value="1501-3000">$1501 - $3000</option>
-                    <option value="3001-5000">$3001 - $5000</option>
-                </select>
+                    <select
+                        value={sortOption}
+                        onChange={handleSortChange}
+                        className="border border-pink-500 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                        <option value="">Sort By</option>
+                        <option value="priceLowToHigh">Price: Low to High</option>
+                        <option value="priceHighToLow">Price: High to Low</option>
+                        <option value="dateNewestFirst">Date Added: Newest First</option>
+                    </select>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -141,7 +134,7 @@ const Product = () => {
                             <p className="text-gray-700 font-semibold">${item.price}</p>
                             <p className="text-gray-500">{item.category}</p>
                             <p className="text-yellow-500">Rating: {item.ratings} / 5</p>
-                            <p className="text-gray-400 text-sm">Added on: {item.creation_date}</p>
+                            <p className="text-gray-400 text-sm">Added on: {new Date(item.creation_date).toLocaleDateString()}</p>
                         </div>
                     </div>
                 ))}
