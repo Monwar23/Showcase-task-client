@@ -6,68 +6,71 @@ import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
 
 const Login = () => {
-
-    const { signIn, user, loading, googleLogin, } = useAuth()
-    const location = useLocation()
-    const navigate = useNavigate()
+    const { signIn, user, loading, googleLogin } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
-            navigate('/product')
+            navigate('/product');
         }
-    }, [navigate, user])
+    }, [navigate, user]);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const onSubmit = data => {
+    const onSubmit = async (data) => {
         const { email, password } = data;
+        try {
+            const result = await signIn(email, password);
+            const loggedInUser = result.user;
+            console.log(loggedInUser);
 
-        signIn(email, password)
-            .then(result => {
-                console.log(result.user);
-                toast.success("Login successful!");
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/jwt`,
+                { email: loggedInUser.email },
+                { withCredentials: true }
+            );
 
+            if (response.data.success) {
+                toast.success('SignIn Successful!');
                 setTimeout(() => {
-                    navigate(location?.state ? location.state : '/product')
-                }, 3000)
+                    navigate(location?.state ? location.state : '/product');
+                }, 2000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Email or password not found');
+        }
+    };
 
-            })
-            .catch(error => {
-                console.log(error);
-                toast.error('Email or password not found')
-            })
-    }
-    // handle google signin
     const handleGoogleSignIn = async () => {
         try {
-            await googleLogin()
-
+            await googleLogin();
             toast.success("Login successful!");
-
             setTimeout(() => {
-                navigate(location?.state ? location.state : '/product')
-            }, 3000)
+                navigate(location?.state ? location.state : '/product');
+            }, 3000);
         } catch (err) {
-            // console.log(err)
-            toast.error(err.message)
+            toast.error(err.message);
         }
-    }
-    if (user || loading) return
+    };
+
+    if (user || loading) return null;
+
     return (
         <div>
             <Helmet>
                 <title>ShowcasePro || Login</title>
             </Helmet>
             <div className="flex items-center justify-center">
-                <div className=" p-10 rounded-lg shadow-lg w-full max-w-md border border-pink-500">
-                    <h2 className="text-3xl font-extrabold mb-8 text-black text-center">Login Now !</h2>
+                <div className="p-10 rounded-lg shadow-lg w-full max-w-md border border-pink-500">
+                    <h2 className="text-3xl font-extrabold mb-8 text-black text-center">Login Now!</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-6">
-                            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
-                                Email
-                            </label>
+                            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">Email</label>
                             <input
                                 className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="email"
@@ -78,9 +81,7 @@ const Login = () => {
                             {errors.email && <span className='text-red-500'>This field is required</span>}
                         </div>
                         <div className="mb-8">
-                            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
-                                Password
-                            </label>
+                            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">Password</label>
                             <input
                                 className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="password"
@@ -109,20 +110,13 @@ const Login = () => {
                             <span className="text-gray-700 font-medium">Google</span>
                         </button>
                     </div>
-
-
                     <p className="mt-8 text-center text-gray-500">
                         Don't have an account?{" "}
-                        <Link to="/signUp"
-                            className="text-pink-500 hover:text-pink-700 font-bold"
-
-                        >
-                            Sign Up
-                        </Link>
+                        <Link to="/signUp" className="text-pink-500 hover:text-pink-700 font-bold">Sign Up</Link>
                     </p>
                 </div>
             </div>
-            <ToastContainer></ToastContainer>
+            <ToastContainer />
         </div>
     );
 };

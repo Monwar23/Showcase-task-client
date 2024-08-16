@@ -1,8 +1,17 @@
-# React + Vite
+## ShowcasePro
+## [Live-Link](https://showcasepro.netlify.app/)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How to Run  :
+- git clone
+- npm install
+- create .env.local
+- in .env.local file updated:
+  - VITE_APP_URL=your localhost url
+  - VITE_APIKEY=Your firebase code
+  - VITE_AUTHDOMAIN=Your firebase code
+  - VITE_PROJECTID=Your firebase code
+  - VITE_STORAGEBUCKET=Your firebase code
+  - VITE_MESSAGINGSENDERID=Your firebase code
+  - VITE_APPID=Your firebase code
+- npm run dev
+- proper run go to Server : [Server Site](https://github.com/Monwar23/job-task-server) and updated all fetch url to localhost
