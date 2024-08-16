@@ -58,8 +58,8 @@ const SignUp = () => {
             <Helmet>
                 <title>ShowcasePro || SignUp</title>
             </Helmet>
-            <div className="py-5 flex items-center justify-center bg-gray-900">
-                <div className="bg-white px-10 py-5 rounded-lg shadow-lg w-full max-w-md">
+            <div className="flex items-center justify-center">
+                <div className="border border-pink-500 px-10 py-5 rounded-lg shadow-lg w-full max-w-md">
                     <h2 className="text-3xl font-extrabold mb-8 text-black text-center">Sign Up Now !</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-6">
@@ -67,7 +67,7 @@ const SignUp = () => {
                                 Full Name
                             </label>
                             <input
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
+                                className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="text"
                                 id="name"
                                 placeholder="Enter your name"
@@ -80,7 +80,7 @@ const SignUp = () => {
                                 Email
                             </label>
                             <input
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
+                                className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="email"
                                 id="email"
                                 placeholder="Enter your email"
@@ -93,7 +93,7 @@ const SignUp = () => {
                                 Password
                             </label>
                             <input
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
+                                className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="password"
                                 id="password"
                                 placeholder="Enter your password"
@@ -110,7 +110,7 @@ const SignUp = () => {
                             </button>
                         </div>
                     </form>
-                    <p className="mt-8 text-center text-gray-500">
+                    <p className="mt-5 text-center text-gray-500">
                         Already have an account?{" "}
                         <Link to="/"
                             className="text-pink-500 hover:text-pink-700 font-bold"

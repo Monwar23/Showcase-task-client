@@ -44,8 +44,8 @@ const Login = () => {
             <Helmet>
                 <title>ShowcasePro || Login</title>
             </Helmet>
-            <div className="min-h-screen flex items-center justify-center bg-gray-900">
-                <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
+            <div className="flex items-center justify-center">
+                <div className=" p-10 rounded-lg shadow-lg w-full max-w-md border border-pink-500">
                     <h2 className="text-3xl font-extrabold mb-8 text-black text-center">Login Now !</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-6">
@@ -53,7 +53,7 @@ const Login = () => {
                                 Email
                             </label>
                             <input
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
+                                className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="email"
                                 id="email"
                                 placeholder="Enter your email"
@@ -66,7 +66,7 @@ const Login = () => {
                                 Password
                             </label>
                             <input
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
+                                className="w-full px-4 py-3 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-300"
                                 type="password"
                                 id="password"
                                 placeholder="Enter your password"

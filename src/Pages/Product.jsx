@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import useAuth from "../Hooks/useAuth";
+// import useAuth from "../Hooks/useAuth";
 import useProduct from "../Hooks/useProduct";
 
 const Product = () => {
-    const { user, logOut } = useAuth();
+    // const { user, logOut } = useAuth();
     const [products] = useProduct();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
@@ -13,9 +13,9 @@ const Product = () => {
     const [priceRange, setPriceRange] = useState([0, 5000]); 
     const itemsPerPage = 8;
 
-    const handleSignOut = () => {
-        logOut();
-    };
+    // const handleSignOut = () => {
+    //     logOut();
+    // };
 
     // Filtering and Sorting Logic
     const filteredProducts = products
@@ -65,7 +65,7 @@ const Product = () => {
                 <title>ShowcasePro || Product</title>
             </Helmet>
 
-            {user && (
+            {/* {user && (
                 <div className="flex items-center justify-end gap-2 mb-4">
                     <h2>{user?.email}</h2>
                     <button
@@ -75,7 +75,7 @@ const Product = () => {
                         Log Out
                     </button>
                 </div>
-            )}
+            )} */}
 
             <div className="mb-4">
                 <input
