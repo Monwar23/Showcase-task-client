@@ -4,20 +4,27 @@ import useAuth from "../Hooks/useAuth";
 import useProduct from "../Hooks/useProduct";
 
 const Product = () => {
-    const { user, logOut } = useAuth()
+    const { user, logOut } = useAuth();
     const [products] = useProduct();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedBrand, setSelectedBrand] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [priceRange, setPriceRange] = useState([0, 5000]); 
     const itemsPerPage = 8;
 
     const handleSignOut = () => {
         logOut();
     };
 
-    // Search logic
-    const filteredProducts = products.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filtering and Sorting Logic
+    const filteredProducts = products
+        .filter((item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            (selectedBrand ? item.brand === selectedBrand : true) &&
+            (selectedCategory ? item.category === selectedCategory : true) &&
+            item.price >= priceRange[0] && item.price <= priceRange[1]
+        );
 
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -33,6 +40,22 @@ const Product = () => {
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
+        setCurrentPage(1); 
+    };
+
+    const handleBrandChange = (e) => {
+        setSelectedBrand(e.target.value);
+        setCurrentPage(1); 
+    };
+
+    const handleCategoryChange = (e) => {
+        setSelectedCategory(e.target.value);
+        setCurrentPage(1); 
+    };
+
+    const handlePriceRangeChange = (e) => {
+        const value = e.target.value.split('-').map(Number);
+        setPriceRange(value);
         setCurrentPage(1); 
     };
 
@@ -54,16 +77,52 @@ const Product = () => {
                 </div>
             )}
 
-            <div>
             <div className="mb-4">
                 <input
                     type="text"
                     placeholder="Search by product name"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className="border px-3 py-2 border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="border px-3 py-2 rounded-lg w-full"
                 />
             </div>
+
+            <div className="mb-4 flex gap-4">
+                <select
+                    value={selectedBrand}
+                    onChange={handleBrandChange}
+                    className="border px-3 py-2 rounded-lg"
+                >
+                    <option value="">Select Brand</option>
+                    <option value="BrandA">Brand A</option>
+                    <option value="BrandB">Brand B</option>
+                </select>
+
+                <select
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                    className="border px-3 py-2 rounded-lg"
+                >
+                    <option value="">Select Category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home Appliances">Home Appliances</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Personal Care">Personal Care</option>
+                </select>
+
+                <select
+                    onChange={handlePriceRangeChange}
+                    className="border px-3 py-2 rounded-lg"
+                >
+                    <option value="0-5000">Select Price Range</option>
+                    <option value="0-100">Under $100</option>
+                    <option value="101-500">$101 - $500</option>
+                    <option value="501-1500">$501 - $1500</option>
+                    <option value="1501-3000">$1501 - $3000</option>
+                    <option value="3001-5000">$3001 - $5000</option>
+                </select>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
