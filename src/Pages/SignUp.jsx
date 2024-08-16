@@ -4,11 +4,18 @@ import { useForm } from "react-hook-form";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 const SignUp = () => {
-    const { createUser } = useAuth()
+    const { createUser,user,loading } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        if(user){
+            navigate('/product')
+        }
+    },[navigate,user])
 
     const {
         register,
@@ -34,7 +41,7 @@ const SignUp = () => {
                 toast.success("Registration successful!");
 
                 setTimeout(() => {
-                    navigate(location?.state ? location.state : '/')
+                    navigate(location?.state ? location.state : '/product')
                 }, 3000)
 
 
@@ -45,7 +52,7 @@ const SignUp = () => {
             })
 
     }
-
+    if(user || loading) return
     return (
         <div>
             <Helmet>

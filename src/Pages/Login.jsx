@@ -4,12 +4,18 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 const Login = () => {
 
-    const { signIn } = useAuth()
+    const { signIn,user,loading } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
+    useEffect(()=>{
+        if(user){
+            navigate('/product')
+        }
+    },[navigate,user])
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -22,7 +28,7 @@ const Login = () => {
                 toast.success("Login successful!");
 
                 setTimeout(() => {
-                    navigate(location?.state ? location.state : '/')
+                    navigate(location?.state ? location.state : '/product')
                 }, 3000)
 
             })
@@ -31,7 +37,7 @@ const Login = () => {
                 toast.error('Email or password not found')
             })
     }
-
+    if(user || loading) return
     return (
         <div>
             <Helmet>
