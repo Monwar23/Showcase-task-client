@@ -5,18 +5,19 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
 
-    const { signIn,user,loading } = useAuth()
+    const { signIn, user, loading, googleLogin, } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
-    
-    useEffect(()=>{
-        if(user){
+
+    useEffect(() => {
+        if (user) {
             navigate('/product')
         }
-    },[navigate,user])
+    }, [navigate, user])
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -38,7 +39,22 @@ const Login = () => {
                 toast.error('Email or password not found')
             })
     }
-    if(user || loading) return
+    // handle google signin
+    const handleGoogleSignIn = async () => {
+        try {
+            await googleLogin()
+
+            toast.success("Login successful!");
+
+            setTimeout(() => {
+                navigate(location?.state ? location.state : '/product')
+            }, 3000)
+        } catch (err) {
+            // console.log(err)
+            toast.error(err.message)
+        }
+    }
+    if (user || loading) return
     return (
         <div>
             <Helmet>
@@ -83,6 +99,18 @@ const Login = () => {
                             </button>
                         </div>
                     </form>
+                    <div className="flex items-center justify-center mt-4">
+                        <h2 className="text-lg font-semibold mr-3">Login With</h2>
+                        <button
+                            className="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-all duration-200"
+                            onClick={handleGoogleSignIn}
+                        >
+                            <FcGoogle size={24} className="mr-2" />
+                            <span className="text-gray-700 font-medium">Google</span>
+                        </button>
+                    </div>
+
+
                     <p className="mt-8 text-center text-gray-500">
                         Don't have an account?{" "}
                         <Link to="/signUp"
