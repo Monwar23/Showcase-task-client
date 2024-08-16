@@ -11,6 +11,7 @@ const Login = () => {
     const { signIn,user,loading } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
+    
     useEffect(()=>{
         if(user){
             navigate('/product')
